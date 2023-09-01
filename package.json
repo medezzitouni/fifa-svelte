@@ -10,24 +10,36 @@
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
 		"test": "vitest",
 		"lint": "prettier --plugin-search-dir . --check . && eslint .",
-		"format": "prettier --plugin-search-dir . --write ."
+		"format": "prettier --plugin-search-dir . --write . --tabWidth 2",
+		"start:db": "json-server backend/generateData.cjs"
 	},
 	"devDependencies": {
 		"@sveltejs/adapter-auto": "^2.0.0",
+		"@sveltejs/adapter-vercel": "^3.0.3",
 		"@sveltejs/kit": "^1.20.4",
+		"@tailwindcss/container-queries": "^0.1.1",
+		"@types/node": "^20.5.7",
 		"@typescript-eslint/eslint-plugin": "^5.45.0",
 		"@typescript-eslint/parser": "^5.45.0",
+		"autoprefixer": "^10.4.15",
+		"clsx": "^2.0.0",
 		"eslint": "^8.28.0",
 		"eslint-config-prettier": "^8.5.0",
 		"eslint-plugin-svelte": "^2.30.0",
+		"lowdb": "^6.0.1",
+		"postcss": "^8.4.28",
 		"prettier": "^2.8.0",
 		"prettier-plugin-svelte": "^2.10.1",
 		"svelte": "^4.0.5",
 		"svelte-check": "^3.4.3",
-		"tslib": "^2.4.1",
+		"tailwind-merge": "^1.14.0",
+		"tailwindcss": "^3.3.3",
 		"typescript": "^5.0.0",
 		"vite": "^4.4.2",
 		"vitest": "^0.34.0"
 	},
-	"type": "module"
+	"type": "module",
+	"dependencies": {
+		"uuidv4": "^6.2.13"
+	}
 }
