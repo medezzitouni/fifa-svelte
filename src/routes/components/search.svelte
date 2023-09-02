@@ -34,6 +34,6 @@
         `,
         count >= 10000 ? 'w-22 px-1' : ''
     ])}>
-		{count}
+		{count || 0}
 	</span>
 </div>

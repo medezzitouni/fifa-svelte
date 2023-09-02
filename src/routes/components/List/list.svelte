@@ -1,8 +1,8 @@
 <script lang="ts">
-	import Item from './item.svelte';
-	import { createEventDispatcher } from 'svelte';
-	import type { Player } from '@types';
 	import { cn } from '$lib/utils';
+	import type { Player } from '@types';
+	import { createEventDispatcher } from 'svelte';
+	import Item from './item.svelte';
 	
 	export let items: Player[];
 	export let count: number = 0;
@@ -39,7 +39,7 @@
 			`,
 			count >= 10000 ? 'w-22 px-1' : ''
 		])}>
-			{count}
+			{count || 0}
 		</span>
 	</div>
 	{#if items.length !== 0}

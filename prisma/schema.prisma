@@ -3,11 +3,13 @@
 
 generator client {
   provider = "prisma-client-js"
+  previewFeatures = ["multiSchema"]
 }
 
 datasource db {
-  provider = "sqlite"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
+  schemas  = ["fifa"]
 }
 
 model Player {
@@ -18,4 +20,6 @@ model Player {
   salary     Float
   devise     String
   pictureURl String
+
+   @@schema("fifa")
 }

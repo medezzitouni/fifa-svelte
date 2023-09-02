@@ -10,20 +10,23 @@ export const GET: RequestHandler = async ({ url }) => {
 		const search = url.searchParams.get('search') ?? '';
 		const page = parseInt(url.searchParams.get('page') ?? '1') || 1;
 		const limit = parseInt(url.searchParams.get('limit') ?? '6') || 6;
-        const where = {
-            OR: [
-                {
-                     firstname: {
-                        contains: search
-                    }
-                },
-                {
-                    lastname: {
-                        contains: search
-                    }
-                }
-            ]
-        }
+
+		const where: object = {
+			OR: [
+				{
+					 firstname: {
+						startsWith: search,
+						mode: 'insensitive'
+					},
+				},
+				{
+					lastname: {
+						startsWith: search,
+						mode: 'insensitive'
+					}
+				}
+			]
+		}
 		const players = await prisma.player.findMany({
             where,
 			skip: (page - 1) * limit,

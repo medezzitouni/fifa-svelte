@@ -1,24 +1,22 @@
 import { PrismaClient } from '@prisma/client';
-import { debug } from 'util';
 import data from './data.json' assert { type: 'json' };
 const prisma = new PrismaClient();
 
-async function runSeeds() {
+export default async function runSeeds() {
+    // clear database
+    await prisma.player.deleteMany()
+
     const users = data.players.map(player => {
         return prisma.player.create({
             data: player
         });
     })
     const res = await Promise.all(users)
+    console.log('====================================');
+    console.log("seeds succeeded !".toUpperCase());
     console.log(res);
+    console.log('====================================');
+
+    
 }
 
-runSeeds()
-	.then(async () => {
-		await prisma.$disconnect();
-	})
-	.catch(async (e) => {
-		debug(e);
-		await prisma.$disconnect();
-		process.exit(1);
-	});

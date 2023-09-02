@@ -10,7 +10,6 @@ const prisma = new PrismaClient();
 export const GET: RequestHandler = async ({ params }: DefaultRouteParams) => {
     try {
         const { id } = params;
-        console.log(id);
         
         const player = await prisma.player.findUnique({
             where: {
