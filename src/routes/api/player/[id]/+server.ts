@@ -1,27 +1,34 @@
-import { API_URL } from "$lib/utils/constants";
+import { debug } from '$lib/utils/debug';
+import { PrismaClient } from '@prisma/client';
 import { error, json } from '@sveltejs/kit';
 import type { RequestHandler, RouteParams } from '../$types';
-import { debug } from '$lib/utils/debug';
 
 type DefaultRouteParams = { params: RouteParams & { id?: string } };
 
-const headers: Headers = new Headers({
-    'Content-type': 'application/json'
-})
+const prisma = new PrismaClient();
 
 export const GET: RequestHandler = async ({ params }: DefaultRouteParams) => {
     try {
         const { id } = params;
-        const res = await fetch(`${API_URL}${id ? '/' + id : ''}`, {
-            headers
-        });
+        console.log(id);
+        
+        const player = await prisma.player.findUnique({
+            where: {
+                id
+            }
+        })
 
-        const count = Number(res.headers.get("x-total-count") || 0);
-        const players = await res.json();
-
+        const agg = await prisma.player.aggregate({
+			_count: { _all: true },
+            where: {
+				id
+			}
+		});
+        
+        
         return json({
-            players,
-            count
+            player,
+            count: agg._count._all
         });
     } catch (err) {
         debug(err)
@@ -36,14 +43,15 @@ export const PUT: RequestHandler = async ({ params, request }: PutType) => {
         const data = await request.json();
         const { id } = params;
 
-        const res = await fetch(new Request(`${API_URL}${id ? '/' + id : ''}`, {
-            method: 'PUT',
-            body: JSON.stringify(data),
-            headers
-        }));
+        const updatedPlayer = await prisma.player.update({
+            where: {
+                id
+            },
+            data
+        })
 
-        return new Response(null, {
-            status: res.status
+        return json(updatedPlayer, {
+            status: 200
         });
     } catch (err) {
         debug(err)
@@ -52,18 +60,18 @@ export const PUT: RequestHandler = async ({ params, request }: PutType) => {
 
 }
 
-
 export const DELETE: RequestHandler = async ({ params }: DefaultRouteParams) => {
     try {
         const { id } = params;
 
-        const res = await fetch(new Request(`${API_URL}${id ? '/' + id : ''}`, {
-            method: 'DELETE',
-            headers
-        }));
+        const deletedPlayer = await prisma.player.delete({
+            where: {
+                id
+            }
+        });
 
-        return new Response((await res.json()), {
-            status: res.status
+        return json(deletedPlayer, {
+            status: 200
         });
     } catch (err) {
         debug(err)
